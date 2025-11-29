@@ -34,6 +34,10 @@ client.on('messageCreate', (message) => {
         message.reply('🏓 pong!');
         console.log(`📝 ${message.author.tag} が ping コマンドを使用`);
     }
+ if (message.content.toLowerCase() === 'こんにゃく') {
+        message.reply('🏓 にゃく！');
+        console.log(`📝 ${message.author.tag} が ping コマンドを使用`);
+    }
 });
 
 // エラーハンドリング
