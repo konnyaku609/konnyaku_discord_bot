@@ -39,8 +39,8 @@ client.on('messageCreate', (message) => {
         console.log(`📝 ${message.author.tag} が こんにゃく コマンドを使用`);
     }
  if(message.content.toLowerCase()==='1d100'){
-		var random = Math.floor(Math.random()*100);
-		message.reply(random);
+		const random = Math.floor(Math.random()*100)+1;
+		message.reply(String(random));
 		console.log(`📝 ${message.author.tag} が 1d100 コマンドを使用`)
 	}
 });
