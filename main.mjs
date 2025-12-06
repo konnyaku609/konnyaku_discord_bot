@@ -36,8 +36,13 @@ client.on('messageCreate', (message) => {
     }
  if (message.content.toLowerCase() === 'こんにゃく') {
         message.reply('🏓 にゃく！');
-        console.log(`📝 ${message.author.tag} が ping コマンドを使用`);
+        console.log(`📝 ${message.author.tag} が こんにゃく コマンドを使用`);
     }
+ if(message.content.toLowerCase()==='1d100'){
+		var random = Math.floor(Math.random()*100);
+		message.reply(random);
+		console.log(`📝 ${message.author.tag} が 1d100 コマンドを使用`)
+	}
 });
 
 // エラーハンドリング
