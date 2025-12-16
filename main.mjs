@@ -1,9 +1,14 @@
 ﻿// main.mjs - Discord Botのメインプログラム
 
 // 必要なライブラリを読み込み
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, GatewayIntentBits,ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  MessageActionRowComponentBuilder,
+  TextChannel, } from 'discord.js';
 import dotenv from 'dotenv';
 import express from 'express';
+
 
 // .envファイルから環境変数を読み込み
 dotenv.config();
@@ -44,6 +49,73 @@ client.on('messageCreate', (message) => {
 		console.log(`📝 ${message.author.tag} が 1d100 コマンドを使用`)
 	}
 });
+
+//ボタンを押すとロールが付与されるやつ
+client.on('interactionCreate', async (interaction) => {
+    // 1. ボタン操作であるかを確認
+    if (!interaction.isButton()) return;
+
+    // 2. どのボタンが押されたか customId で識別
+    if (interaction.customId === 'verify_role_button') {
+        // インタラクションが実行されたギルドとメンバーが存在するか確認
+        const guild = interaction.guild;
+        const member = interaction.member; // これは GuildMember | null
+        const roleId = '蒟蒻ふれんず'; 
+
+        if (!guild || !member) {
+            await interaction.reply({
+                content: 'この操作はサーバー内でのみ有効です。',
+                ephemeral: true, // ephemeral: true で、応答がボタンを押した本人にしか見えないようにする
+            });
+            return;
+        }
+
+        // 3. ロールを付与
+        try {
+            // member は PartialGuildMember の可能性もあるため、GuildMember であるか確認
+            if ('roles' in member) {
+                // ロールIDを取得
+                const role = guild.roles.cache.get(roleId);
+
+                if (!role) {
+                    // ロールが見つからない場合のエラー処理
+                    await interaction.reply({
+                        content: '指定されたロールが見つかりませんでした。管理者にお問い合わせください。',
+                        ephemeral: true,
+                    });
+                    return;
+                }
+
+                // すでにロールを持っているか確認
+                if (member.roles.cache.has(roleId)) {
+                    await interaction.reply({
+                        content: `**${role.name}** ロールはすでにお持ちです。`,
+                        ephemeral: true,
+                    });
+                } else {
+                    // ロールをメンバーに追加
+                    await member.roles.add(role);
+
+                    // 応答を送信
+                    await interaction.reply({
+                        content: `**${role.name}** ロールを付与しました！`,
+                        ephemeral: true,
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('ロール付与中にエラーが発生しました:', error);
+            // エラー時の応答
+            await interaction.reply({
+                content: 'ロール付与中にエラーが発生しました。ボットの権限設定を確認してください。',
+                ephemeral: true,
+            });
+        }
+    }
+});
+
+client.login('YOUR_BOT_TOKEN');
+
 
 // エラーハンドリング
 client.on('error', (error) => {
