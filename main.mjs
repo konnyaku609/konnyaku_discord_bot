@@ -4,7 +4,7 @@
 import { Client, GatewayIntentBits,ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  MessageActionRowComponentBuilder,
+  /*MessageActionRowComponentBuilder,*/
   TextChannel, } from 'discord.js';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -114,7 +114,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 });
 
-client.login('YOUR_BOT_TOKEN');
+//client.login(process.env.DISCORD_TOKEN);
 
 
 // エラーハンドリング
