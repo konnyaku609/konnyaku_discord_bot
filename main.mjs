@@ -159,3 +159,5 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`🌐 Web サーバーがポート ${port} で起動しました`);
 });
+
+console.log("TOKEN length:", process.env.DISCORD_TOKEN?.length);
